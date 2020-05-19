@@ -71,7 +71,7 @@ def get_mobilenetv3_large_seg(classnum=5, root='save/mobilenetv3_large.pth', **k
     model = MobileNetV3Seg(classnum, aux=False, backbone='mobilenetv3_large',
                            pretrained_base=False, **kwargs)
 
-    model.load_state_dict(torch.load('save/mobilenetv3_large.pth'))
+    model.load_state_dict(torch.load(root))
 
     return model
 
