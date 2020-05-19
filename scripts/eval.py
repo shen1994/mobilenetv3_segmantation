@@ -85,7 +85,7 @@ class Evaluator(object):
                 import time
                 time_start = time.time()
                 for i in range(100):
-                    outputs = model(oimage)
+                    outputs = model(image)
                 print((time.time() - time_start) / 100.)
 
             #self.metric.update(outputs[0], target)
