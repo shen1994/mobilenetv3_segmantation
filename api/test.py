@@ -9,8 +9,8 @@ if __name__ == '__main__':
 
     time_start = time.time()
     for i in range(100):
-    	image = cv2.imread("../dataset/rgb/train/1.png", 1)
+    	image = cv2.imread("../dataset/rgb/train/2.png", 1)
     	pred = evaluator.eval(image)
-    print("using time when predicting one: %f"%(time.time - time_start) / 100.)
+    print("using time when predicting one: ", (time.time() - time_start) / 100.)
 
     cv2.imwrite("./a.png", pred * 20)
