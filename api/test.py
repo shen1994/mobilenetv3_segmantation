@@ -19,13 +19,13 @@ from core.utils.visualize import get_color_pallete
 from core.utils.logger import setup_logger
 from core.utils.distributed import synchronize, get_rank, make_data_sampler, make_batch_data_sampler
 
-from train import parse_args
+from scripts.train import parse_args
 
 
 class Evaluator(object):
     def __init__(self, args):
         self.args = args
-        self.device = torch.device(args.device)
+        self.device = torch.device("cuda")
 
         # image transform
         input_transform = transforms.Compose([
@@ -43,6 +43,9 @@ class Evaluator(object):
                                           pin_memory=True)
 
         # create network
+        print(args.model)
+        print(args.classnum)
+        print(args.aux)
         self.model = get_segmentation_model(model=args.model, classnum=args.classnum,
                                             aux=args.aux, pretrained=True, pretrained_base=False)
         if args.distributed:
@@ -67,14 +70,6 @@ class Evaluator(object):
             oimage = oimage.astype(np.float32) / 255.
             oimage = oimage[np.newaxis, ...]
             oimage = torch.tensor(oimage).cuda()
-            #print(oimage.shape)
-
-            #from PIL import Image
-            #oimage = Image.open("../dataset/rgb/val/1.png").convert('RGB')
-            #image_transform = transforms.Compose([transforms.ToTensor()]) 
-            #oimage = image_transform(oimage).unsqueeze(0)
-            #oimage = oimage.to(self.device)
-            #print(oimage.shape)
 
             image = image.to(self.device)
             #print(image)
