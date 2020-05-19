@@ -1,15 +1,13 @@
 import cv2
-import numpy as np
 import torch
-import torch.backends.cudnn as cudnn
+import numpy as np
 
 from model import get_segmentation_model
 
-class Examintion(object):
-    def __init__(self):
-        self.model = get_segmentation_model("mobilenetv3_large", 
-        									classnum=6, 
-        									root="save/mobilenetv3_large.pth")
+class Examination(object):
+    def __init__(self, classnum, model_path):
+        torch.backends.cudnn.benchmark = True
+        self.model = get_segmentation_model("mobilenetv3_large", classnum=classnum, root=model_path)
         self.model.to(torch.device("cuda"))
         self.model.eval()
 
@@ -28,12 +26,3 @@ class Examintion(object):
         predict = np.array(pred.squeeze(0), dtype=np.uint8)
 
         return predict
-
-
-if __name__ == '__main__':
-    cudnn.benchmark = True
-
-    evaluator = Examintion()
-    image = cv2.imread("../dataset/rgb/train/1.png", 1)
-    pred = evaluator.eval(image)
-    cv2.imwrite("./a.png", pred * 20)
