@@ -10,6 +10,7 @@ class Examination(object):
         self.model = get_segmentation_model("mobilenetv3_large", classnum=classnum, root=model_path)
         self.model.to(torch.device("cuda"))
         self.model.eval()
+        print("wellocean Loading: %s"%(model_path))
 
     def eval(self, image):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

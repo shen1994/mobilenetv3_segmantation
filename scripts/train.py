@@ -100,7 +100,6 @@ class Trainer(object):
         # image transform
         input_transform = transforms.Compose([
             transforms.ToTensor(),
-            # transforms.Normalize([.485, .456, .406], [.229, .224, .225]),
         ])
         # dataset and dataloader
         data_kwargs = {'transform': input_transform, 'base_size': args.base_size, 'crop_size': args.crop_size}
@@ -153,7 +152,6 @@ class Trainer(object):
                                          lr=args.lr,
                                          momentum=args.momentum,
                                          weight_decay=args.weight_decay)
-        self.optimizer.param_groups[0]['lr'] = 3e-3
         # lr scheduling
         self.lr_scheduler = WarmupPolyLR(self.optimizer,
                                          max_iters=args.max_iters,

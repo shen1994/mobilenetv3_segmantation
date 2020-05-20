@@ -50,8 +50,6 @@ class MobileNetV3(nn.Module):
         else:
             raise ValueError('Unknown mode.')
 
-        print("you are checking")
-
         # building first layer
         input_channels = int(16 * width_mult) if width_mult > 1.0 else 16
         self.conv1 = ConvBNHswish(3, input_channels, 3, 2, 1, norm_layer=norm_layer)

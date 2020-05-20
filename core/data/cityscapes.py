@@ -110,9 +110,10 @@ class CitySegmentation(data.Dataset):
             mask = mask.transpose(Image.FLIP_LEFT_RIGHT)
 
         img_width = img.size[0]
+        img_height = img.size[1]
 
         target_width = 4000
-        target_height = 720
+        target_height = 2000
         if img.size[0] > target_width and img.size[1] > target_height:
             half_width = (img.size[0] - target_width) // 2
             half_height = (img.size[1] - target_height) // 2
@@ -141,8 +142,13 @@ class CitySegmentation(data.Dataset):
         crop_size = self.crop_size
 
         x1 = random.randint(0, img_width - crop_size)
-        img = img.crop((x1, 0, x1 + crop_size, target_height))
-        mask = mask.crop((x1, 0, x1 + crop_size, target_height))
+        y1 = random.randint(0, img_height - crop_size)
+        img = img.crop((x1, y1, x1 + crop_size, y1 + crop_size))
+        mask = mask.crop((x1, y1, x1 + crop_size, y1 + crop_size))
+
+        #import cv2
+        #cv2.imshow("image", np.array(img))
+        #cv2.waitKey(1)
         
         if random.random() < 0.5:
             img = img.filter(ImageFilter.GaussianBlur(
@@ -172,10 +178,10 @@ def _get_city_pairs(folder, split='train'):
         mask_paths = []
         for root, _, files in os.walk(img_folder):
             for filename in files:
-                if filename.endswith(".png"):
+                if filename.endswith(".png") or filename.endswith(".jpg"):
                     imgpath = os.path.join(root, filename)
                     foldername = os.path.basename(os.path.dirname(imgpath))
-                    maskpath = os.path.join(mask_folder, filename)
+                    maskpath = os.path.join(mask_folder, filename.replace("jpg", "png"))
                     if os.path.isfile(imgpath) and os.path.isfile(maskpath):
                         img_paths.append(imgpath)
                         mask_paths.append(maskpath)
